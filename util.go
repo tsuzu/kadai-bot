@@ -114,7 +114,7 @@ func encodeDuration(t time.Duration) string {
 		if s != 0 {
 			res = append(res, fmt.Sprintf("%d%s", s, durations[i].Name))
 
-			t = t % s
+			t = t % durations[i].Duration
 		}
 	}
 	return strings.Join(res, "")
