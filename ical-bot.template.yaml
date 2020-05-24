@@ -1,0 +1,36 @@
+calendar_endpoint: "https://wsdmoodle.waseda.jp/calendar/export_execute.php?userid="
+check_interval: 10m
+discord:
+  token: discord_token_here
+  parent: "授業情報共有"
+  default_channel: "random"
+notification:
+  schedules:
+    - 24h
+    - 168h
+  templates:
+    add: |
+      新しい課題が追加されました。
+      ```
+      科目: {{.Event.Category}}
+      題名: {{.Event.Summary}}
+      説明: {{.Event.Description}}
+      締め切り: {{EncodeTimestamp .Event.End}}
+      ```
+    update: |
+      課題が更新されました。多分
+      ```
+      科目: {{.Event.Category}}
+      題名: {{.Event.Summary}}
+      説明: {{.Event.Description}}
+      締め切り: {{EncodeTimestamp .Event.End}}
+      ```
+    notify: |
+      以下の課題の締め切りまであと{{EncodeDuration .Event.Param}}です。
+      ```
+      科目: {{.Event.Category}}
+      題名: {{.Event.Summary}}
+      説明: {{.Event.Description}}
+      締め切り: {{EncodeTimestamp .Event.End}}
+      ```
+db_path: ical-bot.db

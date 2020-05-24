@@ -4,11 +4,13 @@ import (
 	"context"
 	"os"
 	"strings"
+	"text/template"
 	"time"
 
 	"github.com/heetch/confita"
 	"github.com/heetch/confita/backend"
 	"github.com/heetch/confita/backend/file"
+	"github.com/prometheus/common/log"
 )
 
 type Duration time.Duration
@@ -44,11 +46,20 @@ func (d *Duration) UnmarshalYAML(unmarshal func(interface{}) error) error {
 }
 
 type Config struct {
-	CalendarEndpoint     string     `json:"calendar_endpoint" yaml:"calendar_endpoint" config:"calendar_endpoint"`
-	CheckInterval        Duration   `json:"check_interval" yaml:"check_interval" config:"check_interval"`
-	DBPath               string     `json:"db_path" yaml:"db_path" config:"db_path"`
-	NotificationSchedule []Duration `json:"notification" yaml:"notification" config:"-"`
-	DiscordToken         string     `json:"discord_token" yaml:"discord_token" config:"discord_token"`
+	CalendarEndpoint string   `json:"calendar_endpoint" yaml:"calendar_endpoint" config:"calendar_endpoint"`
+	CheckInterval    Duration `json:"check_interval" yaml:"check_interval" config:"check_interval"`
+	DBPath           string   `json:"db_path" yaml:"db_path" config:"db_path"`
+	Discord          struct {
+		Token          string `json:"token" yaml:"token" config:"discord_token"`
+		GuildID        string `json:"guild_id" yaml:"guild_id" config:"discord_guild_id"`
+		Parent         string `json:"parent" yaml:"parent" config:"discord_parent"`
+		DefaultChannel string `json:"default_channel" yaml:"default_channel" config:"discord_default_channel"`
+	} `json:"discord" yaml:"discord"`
+	Notification struct {
+		Templtes        map[string]string             `json:"templates" yaml:"templates" config:"-"`
+		ParsedTemplates map[string]*template.Template `json:"-" yaml:"-" config:"-"`
+		Schedules       []Duration                    `json:"schedules" yaml:"schedules" config:"-"`
+	} `json:"notification" yaml:"notification"`
 }
 
 // NewBackend creates a configuration loader that loads from the environment.
@@ -76,6 +87,22 @@ func LoadConfig() *Config {
 	cfg := &Config{}
 	if err := confita.NewLoader(bs...).Load(context.Background(), cfg); err != nil {
 		panic(err)
+	}
+
+	funcs := template.FuncMap{
+		"EncodeTimestamp": encodeTimestamp,
+		"EncodeDuration":  encodeDuration,
+	}
+
+	cfg.Notification.ParsedTemplates = map[string]*template.Template{}
+	for key, val := range cfg.Notification.Templtes {
+		tmpl, err := template.New(key).Funcs(funcs).Parse(val)
+
+		if err != nil {
+			log.Fatalf("failed to parse template for %s: %+v", key, err)
+		}
+
+		cfg.Notification.ParsedTemplates[key] = tmpl
 	}
 
 	return cfg
