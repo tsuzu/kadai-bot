@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"reflect"
 	"sort"
 	"strings"
 	"syscall"
@@ -158,7 +157,7 @@ func main() {
 						Kind:  "ADD",
 						Event: event,
 					}
-				} else if !reflect.DeepEqual(old.Event, event) {
+				} else if event.LastModified.After(old.Event.LastModified.Add(10 * time.Second)) {
 					de = &DiscordEvent{
 						Kind:  "UPDATE",
 						Event: event,
