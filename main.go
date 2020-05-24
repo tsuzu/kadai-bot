@@ -48,7 +48,7 @@ func loadCalendar(endpoint string) ([]*Event, error) {
 	err = parser.Parse()
 
 	if err != nil {
-		panic(xerrors.Errorf("failed to parse calendar: %w", err))
+		return nil, xerrors.Errorf("failed to parse calendar: %w", err)
 	}
 
 	events := make([]*Event, len(parser.Events))
