@@ -1,0 +1,5 @@
+ical-bot.yaml
+ical-bot.db
+
+.DS_Store
+.vscode/
