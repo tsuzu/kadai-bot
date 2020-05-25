@@ -1,4 +1,5 @@
-calendar_endpoint: "https://wsdmoodle.waseda.jp/calendar/export_execute.php?userid="
+calendar_endpoint:
+  - "https://wsdmoodle.waseda.jp/calendar/export_execute.php?userid="
 check_interval: 10m
 discord:
   token: discord_token_here

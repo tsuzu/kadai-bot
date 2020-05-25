@@ -46,10 +46,10 @@ func (d *Duration) UnmarshalYAML(unmarshal func(interface{}) error) error {
 }
 
 type Config struct {
-	CalendarEndpoint string   `json:"calendar_endpoint" yaml:"calendar_endpoint" config:"calendar_endpoint"`
-	CheckInterval    Duration `json:"check_interval" yaml:"check_interval" config:"check_interval"`
-	DBPath           string   `json:"db_path" yaml:"db_path" config:"db_path"`
-	Discord          struct {
+	CalendarEndpoints []string `json:"calendar_endpoint" yaml:"calendar_endpoint" config:"calendar_endpoint"`
+	CheckInterval     Duration `json:"check_interval" yaml:"check_interval" config:"check_interval"`
+	DBPath            string   `json:"db_path" yaml:"db_path" config:"db_path"`
+	Discord           struct {
 		Token          string `json:"token" yaml:"token" config:"discord_token"`
 		GuildID        string `json:"guild_id" yaml:"guild_id" config:"discord_guild_id"`
 		Parent         string `json:"parent" yaml:"parent" config:"discord_parent"`

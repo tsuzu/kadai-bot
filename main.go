@@ -132,13 +132,20 @@ func main() {
 		case <-first:
 		}
 
-		events, err := loadCalendar(cfg.CalendarEndpoint)
+		eventss := make([][]*Event, len(cfg.CalendarEndpoints))
+		for i, ep := range cfg.CalendarEndpoints {
+			events, err := loadCalendar(ep)
 
-		if err != nil {
-			log.Printf("failed to load config: %v", err)
+			if err != nil {
+				log.Printf("failed to load config: %v", err)
 
-			continue
+				continue
+			}
+
+			eventss[i] = events
 		}
+
+		events := uniqueEvents(eventss...)
 
 		discordEvents := make([]*DiscordEvent, 0, 32)
 		err = db.Update(func(tx *bolt.Tx) error {

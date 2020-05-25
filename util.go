@@ -119,3 +119,22 @@ func encodeDuration(t time.Duration) string {
 	}
 	return strings.Join(res, "")
 }
+
+func uniqueEvents(eventss ...[]*Event) []*Event {
+	m := map[string]*Event{}
+	sum := 0
+	for i := range eventss {
+		for _, e := range eventss[i] {
+			m[e.UID] = e
+		}
+		sum += len(eventss[i])
+	}
+
+	arr := make([]*Event, 0, sum)
+
+	for _, e := range m {
+		arr = append(arr, e)
+	}
+
+	return arr
+}
