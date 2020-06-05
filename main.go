@@ -231,6 +231,8 @@ func main() {
 			} else {
 				buf := bytes.NewBuffer(nil)
 
+				de.Event.Description = unescape(de.Event.Description)
+
 				if err := tmpl.Execute(buf, de); err != nil {
 					log.Printf("template execution failed for %s: %+v", de.Kind, err)
 					_, err = session.ChannelMessageSend(id, string(encoded))

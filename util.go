@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -137,4 +138,14 @@ func uniqueEvents(eventss ...[]*Event) []*Event {
 	}
 
 	return arr
+}
+
+func unescape(str string) string {
+	s, err := strconv.Unquote("\"" + strings.ReplaceAll(str, "\"", "\\\"") + "\"")
+
+	if err != nil {
+		return str
+	}
+
+	return s
 }
