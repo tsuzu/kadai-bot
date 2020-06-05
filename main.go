@@ -214,11 +214,18 @@ func main() {
 			}
 		}
 
+		bufferedMessages := map[string][]string{}
+
+		// Generate messages
 		for _, de := range discordEvents {
 			id, _ := mostMatchedChannel(cfg.Discord.Parent, channels, de)
 
 			if id == "" {
 				id = defaultChannelID
+			}
+
+			if _, ok := bufferedMessages[id]; !ok {
+				bufferedMessages[id] = []string{}
 			}
 
 			tmpl, ok := cfg.Notification.ParsedTemplates[strings.ToLower(de.Kind)]
@@ -227,7 +234,8 @@ func main() {
 			var _ *discordgo.Message
 			if !ok {
 				log.Printf("unknown template for %s: %+v", de.Kind, err)
-				_, err = session.ChannelMessageSend(id, string(encoded))
+
+				bufferedMessages[id] = append(bufferedMessages[id], string(encoded))
 			} else {
 				buf := bytes.NewBuffer(nil)
 
@@ -235,16 +243,38 @@ func main() {
 
 				if err := tmpl.Execute(buf, de); err != nil {
 					log.Printf("template execution failed for %s: %+v", de.Kind, err)
-					_, err = session.ChannelMessageSend(id, string(encoded))
-				} else {
-					_, err = session.ChannelMessageSend(id, buf.String())
-				}
-			}
 
-			if err != nil {
-				log.Printf("failed to send message: %+v", err)
+					bufferedMessages[id] = append(bufferedMessages[id], string(encoded))
+				} else {
+					bufferedMessages[id] = append(bufferedMessages[id], buf.String())
+				}
 			}
 		}
 
+		// Batch sending
+		for k, v := range bufferedMessages {
+			var buf string
+			for _, s := range v {
+				newBuf := buf
+				if len(buf) != 0 {
+					newBuf = newBuf + "\n"
+				}
+				newBuf = newBuf + s
+
+				if len([]rune(newBuf)) > 2000 {
+					if _, err := session.ChannelMessageSend(k, buf); err != nil {
+						log.Printf("failed to send message(%s): %+v", buf, err)
+					}
+					buf = s
+				} else {
+					buf = newBuf
+				}
+			}
+			if len(buf) != 0 {
+				if _, err := session.ChannelMessageSend(k, buf); err != nil {
+					log.Printf("failed to send message(%s): %+v", buf, err)
+				}
+			}
+		}
 	}
 }
