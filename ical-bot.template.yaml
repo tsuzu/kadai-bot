@@ -27,7 +27,7 @@ notification:
       締め切り: {{EncodeTimestamp .Event.End}}
       ```
     notify: |
-      以下の課題の締め切りまであと{{EncodeDuration .Event.Param}}です。
+      以下の課題の締め切りまであと{{EncodeDuration .Param}}です。
       ```
       科目: {{.Event.Category}}
       題名: {{.Event.Summary}}
