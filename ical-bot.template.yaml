@@ -3,8 +3,8 @@ calendar_endpoint:
 check_interval: 10m
 discord:
   token: discord_token_here
-  parent: "授業情報共有"
-  default_channel: "random"
+  parent: "授業情報共有" # Parent category name
+  default_channel: "random" # Might not work properly...
 notification:
   schedules:
     - 24h
