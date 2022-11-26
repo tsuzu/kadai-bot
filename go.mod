@@ -1,4 +1,4 @@
-module github.com/cs3238-tsuzu/ical-bot
+module github.com/tsuzu/ical-bot
 
 go 1.14
 
