@@ -52,7 +52,7 @@ func levenStein(x, y string) float64 {
 	return float64(arr[len(a)][len(b)]) / float64(l)
 }
 
-func mostMatchedChannel(parent string, channels []*discordgo.Channel, event *DiscordEvent) (id, name string) {
+func mostMatchedChannel(parents []string, channels []*discordgo.Channel, event *DiscordEvent) (id, name string) {
 	category := event.Event.Category
 
 	type pair struct {
@@ -68,10 +68,22 @@ func mostMatchedChannel(parent string, channels []*discordgo.Channel, event *Dis
 	}
 
 	for i := range channels {
-		if parent != "" {
+		if len(parents) != 0 {
 			p, ok := channelMap[channels[i].ParentID]
 
-			if !ok || p.Name != parent {
+			if !ok {
+				continue
+			}
+
+			found := false
+			for _, parent := range parents {
+				if p.Name == parent {
+					found = true
+					break
+				}
+			}
+
+			if !found {
 				continue
 			}
 		}

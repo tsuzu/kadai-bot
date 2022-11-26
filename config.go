@@ -50,10 +50,11 @@ type Config struct {
 	CheckInterval     Duration `json:"check_interval" yaml:"check_interval" config:"check_interval"`
 	DBPath            string   `json:"db_path" yaml:"db_path" config:"db_path"`
 	Discord           struct {
-		Token          string `json:"token" yaml:"token" config:"discord_token"`
-		GuildID        string `json:"guild_id" yaml:"guild_id" config:"discord_guild_id"`
-		Parent         string `json:"parent" yaml:"parent" config:"discord_parent"`
-		DefaultChannel string `json:"default_channel" yaml:"default_channel" config:"discord_default_channel"`
+		Token          string   `json:"token" yaml:"token" config:"discord_token"`
+		GuildID        string   `json:"guild_id" yaml:"guild_id" config:"discord_guild_id"`
+		Parent         string   `json:"parent" yaml:"parent" config:"discord_parent"`
+		Parents        []string `json:"parents" yaml:"parents" config:"discord_parents"`
+		DefaultChannel string   `json:"default_channel" yaml:"default_channel" config:"discord_default_channel"`
 	} `json:"discord" yaml:"discord"`
 	Notification struct {
 		Templtes        map[string]string             `json:"templates" yaml:"templates" config:"-"`

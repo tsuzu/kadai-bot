@@ -218,7 +218,7 @@ func main() {
 
 		// Generate messages
 		for _, de := range discordEvents {
-			id, _ := mostMatchedChannel(cfg.Discord.Parent, channels, de)
+			id, _ := mostMatchedChannel(append(cfg.Discord.Parents, cfg.Discord.Parent), channels, de)
 
 			if id == "" {
 				id = defaultChannelID
