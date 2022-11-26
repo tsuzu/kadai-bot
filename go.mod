@@ -1,4 +1,4 @@
-module github.com/tsuzu/ical-bot
+module github.com/tsuzu/kadai-bot
 
 go 1.14
 
