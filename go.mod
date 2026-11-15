@@ -8,7 +8,7 @@ require (
 	github.com/alecthomas/units v0.0.0-20211218093645-b94a6e3cc137 // indirect
 	github.com/apognu/gocal v0.9.0
 	github.com/bwmarrin/discordgo v0.26.1
-	github.com/gorilla/websocket v1.5.0 // indirect
+	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/heetch/confita v0.10.0
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/common v0.2.0
