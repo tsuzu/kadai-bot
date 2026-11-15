@@ -12,7 +12,7 @@ require (
 	github.com/heetch/confita v0.10.0
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/common v0.2.0
-	github.com/sirupsen/logrus v1.9.0 // indirect
+	github.com/sirupsen/logrus v1.9.1 // indirect
 	go.etcd.io/bbolt v1.3.6
 	golang.org/x/crypto v0.3.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2
